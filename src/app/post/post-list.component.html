@@ -1,0 +1,31 @@
+<div class="container">
+  <h1 class="my-2 text-center">Post List</h1>
+  <div class="d-flex flex-row-reverse">
+    <button (click)="navigateToForm()" class="btn btn-primary mb-3">
+      Create a new Post
+    </button>
+  </div>
+  <table class="table table-dark table-hover table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Title</th>
+        <th scope="col">Description</th>
+        <th scope="col" class="text-center">Action</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let post of posts; let i = index">
+      <tr>
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ post.title }}</td>
+        <td>{{ post.body }}</td>
+        <td class="text-center">
+          <div class="d-flex justify-content-center gap-3">
+            <i (click)="removePost(post.id)" class="bi bi-trash3"></i>
+            <i (click)="editPost(post)" class="bi bi-pencil ml-2"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
