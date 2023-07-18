@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IPost } from './post';
+import { IPost, IPostRequest } from './post';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PostService } from './post.service';
 
 @Component({
   selector: 'post-form',
@@ -11,7 +12,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
         Back To List
       </button>
       <h2>{{ postForm.value.id ? 'Update' : 'Create' }} Post</h2>
-      <form [formGroup]="postForm" class="row g-3">
+      <form [formGroup]="postForm" class="row g-3" (ngSubmit)="onSubmit()">
         <div class="form-group ">
           <label for="postTitle">Title</label>
           <input
@@ -52,12 +53,17 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
             <small
               *ngIf="getPostBody?.errors?.['minlength']"
               class="text-danger"
-              >Description must be at least 20 characters</small
+              >Description must be at least 25 characters</small
             >
           </div>
         </div>
-        {{ postForm.valid | json }}
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button
+          [disabled]="postForm.invalid"
+          type="submit"
+          class="btn btn-primary"
+        >
+          Submit
+        </button>
       </form>
     </div>
   </div>`,
@@ -76,13 +82,14 @@ export class PostFormComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private postService: PostService
   ) {}
   ngOnInit(): void {
     this.postForm = this.fb.group({
       id: [''],
       title: ['', [Validators.required, Validators.minLength(5)]],
-      body: ['', [Validators.required, Validators.minLength(20)]],
+      body: ['', [Validators.required, Validators.minLength(25)]],
     });
 
     this.route.paramMap.subscribe((params) => {
@@ -98,5 +105,29 @@ export class PostFormComponent implements OnInit {
 
   backToList() {
     this.router.navigate(['posts']);
+  }
+
+  onSubmit() {
+    if (this.postForm.value.id) {
+      const { title, body } = this.postForm.value;
+      this.updatePost(this.postForm.value.id, { title, body });
+      return;
+    }
+    this.createPost({
+      title: this.postForm.value.title,
+      body: this.postForm.value.body,
+    });
+  }
+
+  createPost(post: IPostRequest) {
+    this.postService.createPost(post).subscribe((data) => {
+      this.backToList();
+    });
+  }
+
+  updatePost(id: number, post: IPostRequest) {
+    this.postService.updatePost(id, post).subscribe(() => {
+      this.backToList();
+    });
   }
 }
