@@ -1,3 +1,5 @@
+import { ResourceModel } from '../config/generic.model';
+
 export interface IPost {
   id: number;
   title: string;
@@ -15,4 +17,13 @@ export interface IPostResponse {
   body: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export class Post extends ResourceModel<Post> {
+  public title!: string;
+  public body!: string;
+
+  constructor(model?: Partial<Post>) {
+    super(model);
+  }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IPost, IPostRequest } from './post';
+import { IPost, IPostRequest, Post } from './post';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PostService } from './post.service';
 
@@ -109,8 +109,8 @@ export class PostFormComponent implements OnInit {
 
   onSubmit() {
     if (this.postForm.value.id) {
-      const { title, body } = this.postForm.value;
-      this.updatePost(this.postForm.value.id, { title, body });
+      const { id, title, body } = this.postForm.value;
+      this.updatePost({ id, title, body });
       return;
     }
     this.createPost({
@@ -119,14 +119,14 @@ export class PostFormComponent implements OnInit {
     });
   }
 
-  createPost(post: IPostRequest) {
-    this.postService.createPost(post).subscribe((data) => {
+  createPost(post: Post) {
+    this.postService.create(post).subscribe((data) => {
       this.backToList();
     });
   }
 
-  updatePost(id: number, post: IPostRequest) {
-    this.postService.updatePost(id, post).subscribe(() => {
+  updatePost(post: Post) {
+    this.postService.update(post).subscribe(() => {
       this.backToList();
     });
   }

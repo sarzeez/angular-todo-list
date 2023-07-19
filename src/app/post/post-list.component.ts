@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IPost } from './post';
+import { IPost, Post } from './post';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PostService } from './post.service';
 
@@ -8,7 +8,7 @@ import { PostService } from './post.service';
   templateUrl: './post-list.component.html',
 })
 export class PostListComponent implements OnInit {
-  public posts: IPost[] = [];
+  public posts: Post[] = [];
 
   constructor(
     private router: Router,
@@ -20,7 +20,7 @@ export class PostListComponent implements OnInit {
     this.getPosts();
   }
 
-  editPost(post: IPost) {
+  editPost(post: Post) {
     this.router.navigate(['form', { ...post }], { relativeTo: this.route });
   }
 
@@ -29,13 +29,13 @@ export class PostListComponent implements OnInit {
   }
 
   deletePost(id: number) {
-    this.postService.deletePost(id).subscribe(() => {
+    this.postService.delete(id).subscribe(() => {
       this.getPosts();
     });
   }
 
   getPosts() {
-    this.postService.getPosts().subscribe((data) => {
+    this.postService.get().subscribe((data) => {
       this.posts = data;
     });
   }
