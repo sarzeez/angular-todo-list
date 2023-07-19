@@ -4,11 +4,23 @@ import { PostListComponent } from '../post/post-list.component';
 import { PageNotFoundComponent } from './page-not-found.component';
 import { UserComponent } from '../user/user.component';
 import { PostFormComponent } from '../post/post-form.component';
+import { LoginComponent } from '../auth/login.component';
+import { HomeComponent } from '../home/home.component';
+import { AuthGuard } from '../auth/auth.guard';
 
 const routes: Routes = [
   {
+    path: '',
+    component: HomeComponent,
+  },
+  {
+    path: 'auth/login',
+    component: LoginComponent,
+  },
+  {
     path: 'posts',
     component: PostListComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'posts/form',
@@ -18,7 +30,7 @@ const routes: Routes = [
     path: 'user',
     component: UserComponent,
   },
-  { path: '', redirectTo: '/posts', pathMatch: 'full' },
+  { path: '', redirectTo: '/', pathMatch: 'full' },
   {
     path: '**',
     component: PageNotFoundComponent,
@@ -35,4 +47,5 @@ export const routingComponents = [
   PostFormComponent,
   PageNotFoundComponent,
   UserComponent,
+  LoginComponent,
 ];
