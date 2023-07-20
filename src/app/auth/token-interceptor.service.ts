@@ -10,7 +10,7 @@ export class TokenInterceptorService implements HttpInterceptor {
     let tokenizedReq = req.clone({
       headers: req.headers.set(
         'Authorization',
-        'bearer ' + authService.getTokenFromLocalStorage()
+        'Bearer ' + authService.getTokenFromLocalStorage()
       ),
     });
     return next.handle(tokenizedReq);

@@ -11,9 +11,8 @@ const LOCAL_STORAGE_KEY = 'token';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api';
-  private _signupUrl = `${this.apiUrl}/users/signup`;
-  private _loginUrl = `${this.apiUrl}/auth/login`;
+  private _signupUrl = `users/signup`;
+  private _loginUrl = `auth/login`;
 
   constructor(private http: HttpClient, private router: Router) {}
 
