@@ -36,24 +36,6 @@ export class AuthGuard {
     | UrlTree {
     return this.canActivate(next, state);
   }
-  canDeactivate(
-    component: unknown,
-    currentRoute: ActivatedRouteSnapshot,
-    currentState: RouterStateSnapshot,
-    nextState?: RouterStateSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return true;
-  }
-  canLoad(
-    route: Route,
-    segments: UrlSegment[]
-  ): Observable<boolean> | Promise<boolean> | boolean {
-    return true;
-  }
 
   checkUserLogin(route: ActivatedRouteSnapshot, url: any): boolean {
     if (this.authService.loggedIn()) {

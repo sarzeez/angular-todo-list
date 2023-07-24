@@ -36,7 +36,7 @@ const routes: Routes = [
     component: UserComponent,
     canActivate: [AuthGuard],
     data: {
-      role: [Role.ROLE_USER, Role.ROLE_SUPERADMIN],
+      role: [Role.ROLE_USER],
     },
   },
   {
