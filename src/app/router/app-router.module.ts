@@ -7,6 +7,8 @@ import { PostFormComponent } from '../post/post-form.component';
 import { LoginComponent } from '../auth/login.component';
 import { HomeComponent } from '../home/home.component';
 import { AuthGuard } from '../auth/auth.guard';
+import { Role } from '../auth/auth.type';
+import { PageForbiddenComponent } from './page-forbidden.component';
 
 const routes: Routes = [
   {
@@ -21,6 +23,9 @@ const routes: Routes = [
     path: 'posts',
     component: PostListComponent,
     canActivate: [AuthGuard],
+    data: {
+      role: [Role.ROLE_SUPERADMIN],
+    },
   },
   {
     path: 'posts/form',
@@ -29,7 +34,16 @@ const routes: Routes = [
   {
     path: 'user',
     component: UserComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: [Role.ROLE_USER, Role.ROLE_SUPERADMIN],
+    },
   },
+  {
+    path: 'forbidden',
+    component: PageForbiddenComponent,
+  },
+
   { path: '', redirectTo: '/', pathMatch: 'full' },
   {
     path: '**',
