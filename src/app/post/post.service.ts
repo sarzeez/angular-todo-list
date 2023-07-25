@@ -8,7 +8,6 @@ import { IPostRequest, IPostResponse } from './post';
   providedIn: 'root',
 })
 export class PostService {
-  apiURL = 'http://localhost:3000/api';
   constructor(private http: HttpClient) {}
 
   httpOptions = {
@@ -19,20 +18,20 @@ export class PostService {
 
   getPosts(): Observable<Array<IPostResponse>> {
     return this.http
-      .get<Array<IPostResponse>>(this.apiURL + '/posts')
+      .get<Array<IPostResponse>>('posts')
       .pipe(retry(0), catchError(this.handleError));
   }
 
   getPost(id: number): Observable<IPostResponse> {
     return this.http
-      .get<IPostResponse>(this.apiURL + `/posts/${id}`)
+      .get<IPostResponse>(`posts/${id}`)
       .pipe(retry(0), catchError(this.handleError));
   }
 
   createPost(post: IPostRequest): Observable<IPostResponse> {
     return this.http
       .post<IPostResponse>(
-        this.apiURL + '/posts',
+        'posts',
         {
           ...post,
         },
@@ -43,17 +42,13 @@ export class PostService {
 
   updatePost(id: number, post: IPostRequest): Observable<IPostResponse> {
     return this.http
-      .put<IPostResponse>(
-        this.apiURL + `/posts/${id}`,
-        { ...post },
-        this.httpOptions
-      )
+      .put<IPostResponse>(`posts/${id}`, { ...post }, this.httpOptions)
       .pipe(retry(0), catchError(this.handleError));
   }
 
   deletePost(id: number) {
     return this.http
-      .delete<IPostResponse>(this.apiURL + `/posts/${id}`, this.httpOptions)
+      .delete<IPostResponse>(`posts/${id}`, this.httpOptions)
       .pipe(retry(0), catchError(this.handleError));
   }
 
