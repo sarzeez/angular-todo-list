@@ -1,11 +1,18 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ILoginRequest, ILoginResponse, ISignupRequest } from './auth.type';
+import {
+  ILoginRequest,
+  ILoginResponse,
+  ISignupRequest,
+  JwtPayload,
+  Session,
+} from './auth.type';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
+import jwtDecode from 'jwt-decode';
 
-const LOCAL_STORAGE_KEY = 'token';
+const LOCAL_STORAGE_KEY = 'session';
 
 @Injectable({
   providedIn: 'root',
@@ -43,16 +50,28 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  setTokenToLocalStorage(token: string) {
-    localStorage.setItem(LOCAL_STORAGE_KEY, token);
-  }
-
-  getTokenFromLocalStorage() {
-    return localStorage.getItem(LOCAL_STORAGE_KEY);
-  }
-
   loggedIn() {
-    return !!this.getTokenFromLocalStorage();
+    return !!this.getSession();
+  }
+
+  getSession(): Session | null {
+    const session = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return session ? JSON.parse(session) : null;
+  }
+
+  setSession(token: string) {
+    const decodedToken = jwtDecode<JwtPayload>(token);
+    const session: Session = {
+      accessToken: token,
+      user: {
+        id: decodedToken.id,
+        firstname: decodedToken.firstname,
+        email: decodedToken.email,
+        role: decodedToken.role,
+      },
+      accessTokenExpires: decodedToken.exp * 1000,
+    };
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(session));
   }
 
   // Error handling
