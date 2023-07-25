@@ -40,7 +40,12 @@ export class AuthGuard {
   checkUserLogin(route: ActivatedRouteSnapshot, url: any): boolean {
     if (this.authService.loggedIn()) {
       const userRole = this.authService.getSession()?.user.role;
-      const routerRole: Role[] = route.data?.['role'] || [];
+      const routerRole: Role[] = route.data?.['role'];
+
+      if (!routerRole) {
+        return true;
+      }
+
       if (userRole && routerRole.includes(userRole)) {
         return true;
       }

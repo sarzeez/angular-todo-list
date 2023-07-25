@@ -9,6 +9,7 @@ import { HomeComponent } from '../home/home.component';
 import { AuthGuard } from '../auth/auth.guard';
 import { Role } from '../auth/auth.type';
 import { PageForbiddenComponent } from './page-forbidden.component';
+import { EmployeeComponent } from '../employee/employee.component';
 
 const routes: Routes = [
   {
@@ -35,9 +36,10 @@ const routes: Routes = [
     path: 'user',
     component: UserComponent,
     canActivate: [AuthGuard],
-    data: {
-      role: [Role.ROLE_USER],
-    },
+  },
+  {
+    path: 'employee',
+    component: EmployeeComponent,
   },
   {
     path: 'forbidden',
