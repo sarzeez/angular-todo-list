@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit {
       })
       .subscribe((res) => {
         const { accessToken } = res;
-        this.authService.setTokenToLocalStorage(accessToken);
+        this.authService.setSession(accessToken);
         this.router.navigate(['/']);
       });
   }
